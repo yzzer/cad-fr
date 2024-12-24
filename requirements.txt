@@ -1,0 +1,7 @@
+numpy==1.26.4
+opencv-python
+deepface  # recommend instal latest version from github https://github.com/serengil/deepface.git 
+pydantic
+tf-keras
+pydantic-settings
+ultralytics
