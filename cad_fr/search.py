@@ -54,15 +54,15 @@ def get_search_result(source_img_path, db_path, model_name, detector_backend="ce
 if __name__ == "__main__":
     import sys
     param = sys.argv
+    from cad_fr.config import settings
     
     if len(param) > 1:
         source_img_path = param[1]
         db_path = param[2]
     else:
-        source_img_path = "config/2014.jpg"
-        db_path = r"cad_db"
+        source_img_path = settings.demo_img_path
+        db_path = settings.db_path
 
-    from cad_fr.config import settings
     model_name = settings.presentation_model_name
     detector_backend = settings.presentation_face_detector
     expand_percentage = settings.presentation_expand_percentage

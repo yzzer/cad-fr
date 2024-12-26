@@ -1,0 +1,1 @@
+export PYTHON_HOME=~/miniconda3/envs/cad-fr/bin

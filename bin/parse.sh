@@ -1,7 +1,8 @@
 #!/bin/bash
-PYTHON_HOME=/Users/yzzer/miniconda3/envs/cad-fr/bin
-export PYTHONPATH=$(pwd):$PYTHONPATH
+export PYTHONPATH=$(dirname "$0")/../:$PYTHONPATH
 export HF_ENDPOINT="https://hf-mirror.com"
+export WORKDIR=$(dirname "$0")/../
+source $WORKDIR/bin/env.sh
 # 获取所有的参数
 args=("$@")
 $PYTHON_HOME/python cad_fr/parse.py $@

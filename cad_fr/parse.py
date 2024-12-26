@@ -16,7 +16,7 @@ def insert_face(id: str, file_id: str, file_name: str, target_x: int, target_y: 
 
 def clear_flag(cursor: Cursor) -> None:
     cursor.execute('''
-    UPDATE face SET flag = 0
+    UPDATE face SET flag = 0, checkin_time = 0
     ''')
 
 

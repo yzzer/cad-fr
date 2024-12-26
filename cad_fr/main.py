@@ -1,4 +1,5 @@
 import cv2
+import time
 import numpy as np
 from cad_fr.config import settings
 from utils.face_extract import face_extract, cut_faces, resize_faces
@@ -16,9 +17,12 @@ def search_service(queue: Queue):
         face: np.ndarray = queue.get()
         if face is None:
             continue
+        
+        tik = time.time()
         find_idxes = service.find(face, model_name=settings.presentation_model_name, threshold=settings.presentation_sim_threshold, detector_backend="skip")
         checkin(find_idxes, cursur)
         print(find_idxes)
+        print(f"search time: {time.time() - tik}s")
         
         
 
@@ -39,8 +43,9 @@ def main():
                                 confidence_threshold=settings.face_detection_threshold,
                                 expand=settings.presentation_expand_percentage)
         
+        raw_frame = frame.copy()
         for obj in face_objs:
-            obj["raw_face"] = cut_faces(frame, [obj])[0]
+            obj["raw_face"] = cut_faces(raw_frame, [obj])[0]
             obj["face"] = cv2.cvtColor(obj["raw_face"], cv2.COLOR_BGR2RGB)
             if buffer.add_face(obj, model_name=settings.presentation_model_name):
                 queue.put(obj["face"])

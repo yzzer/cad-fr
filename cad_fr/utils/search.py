@@ -30,7 +30,6 @@ def subprocess_init(hash_index: list[str], embeddings: list[any], warm_up_time_m
     
     import time
     time.sleep(warm_up_time_ms / 1000)
-    print("subprocess_init done")
 
 
 def find_local(i, face_embedding: np.ndarray, threshold: float = 0.3, workers: int = 5) -> List[str]:
