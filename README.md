@@ -1,6 +1,6 @@
 ## 人脸签到系统
-
-#### install
+> [front end](https://github.com/BUPT-CAD-Lab/annual-metting-fe)
+## install
 1. clone
 ```
 git clone https://github.com/yzzer/cad-fr.git
@@ -15,7 +15,7 @@ pip install -e .
 pip install -r requirements.txt
 ```
 
-#### run
+## run
 0. modify config (`config/config.yaml`) and env (`bin/env.sh`)
 1. create db
 ```
