@@ -35,7 +35,7 @@ def main():
     search_process = Process(target=search_service, args=(queue,))
     search_process.start()
     
-    warm_up_frame_cnt = 10
+    # warm_up_frame_cnt = 30
         
     while True:
         ret, frame = cap.read()
@@ -58,9 +58,9 @@ def main():
         
         face_imgs = resize_faces(buffer.get_faces(), h=face_h, w=face_w)
         
-        if len(face_objs) > 0 and warm_up_frame_cnt > 0:
-            warm_up_frame_cnt -= 1
-            continue
+        # if len(face_objs) > 0 and warm_up_frame_cnt > 0:
+        #     warm_up_frame_cnt -= 1
+        #     continue
         
         for face in face_objs:
             facial_area = face

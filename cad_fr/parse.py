@@ -6,12 +6,15 @@ from sqlite3 import Cursor
 from cad_fr.utils.face_extract import hash_face
 
 def insert_face(id: str, file_id: str, file_name: str, target_x: int, target_y: int, target_w: int, target_h: int, flag: int, cursor: Cursor) -> None:
+    if target_x == 0 and target_y == 0 and target_w == 0 and target_h == 0:
+        # raise Exception('target_x, target_y, target_w, target_h cannot be 0')
+        print(f'target_x, target_y, target_w, target_h be 0 in {file_name}')
+        return
     cursor.execute('''
     INSERT INTO face (id, file_id, file_name, target_x, target_y, target_w, target_h, flag)
                    VALUES (?,?,?,?,?,?,?,?)
     ''', (id, file_id, file_name, target_x, target_y, target_w, target_h, flag))
-    if target_x == 0 and target_y == 0 and target_w == 0 and target_h == 0:
-        raise Exception('target_x, target_y, target_w, target_h cannot be 0')
+
     
 
 def clear_flag(cursor: Cursor) -> None:
