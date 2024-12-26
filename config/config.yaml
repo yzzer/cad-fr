@@ -1,13 +1,13 @@
-db_path: demo_db
+db_path: cad_db
 demo_img_path: config/2014.jpg
 db_file: config/db.sqlite3
 pkl_file: config/ds_model.pkl
-photo_db_dir: cad-db
+photo_db_dir: cad_db
 dedup_similarity_threshold: 0.2
 detector_backend: yolov11s
 face_detection_threshold: 0.8
 presentation_model_name: Facenet512
-presentation_face_detector: yolov11m
+presentation_face_detector: yunet
 presentation_expand_percentage: 10
 presentation_sim_threshold: 0.2
 workers: 3
