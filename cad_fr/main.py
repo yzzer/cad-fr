@@ -13,6 +13,7 @@ def search_service(queue: Queue):
     service = FaceSearchService(db_path=settings.pkl_file, workers=settings.workers, warm_up_time_ms=settings.worker_warm_up_time_ms)
     conn = get_db_conn(settings.db_file)
     cursur = conn.cursor()
+    
     while True:
         face: np.ndarray = queue.get()
         if face is None:
@@ -34,6 +35,8 @@ def main():
     search_process = Process(target=search_service, args=(queue,))
     search_process.start()
     
+    warm_up_frame_cnt = 10
+        
     while True:
         ret, frame = cap.read()
         if not ret:
@@ -54,6 +57,10 @@ def main():
         face_w = 98
         
         face_imgs = resize_faces(buffer.get_faces(), h=face_h, w=face_w)
+        
+        if len(face_objs) > 0 and warm_up_frame_cnt > 0:
+            warm_up_frame_cnt -= 1
+            continue
         
         for face in face_objs:
             facial_area = face
