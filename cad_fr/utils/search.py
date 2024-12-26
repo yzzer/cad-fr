@@ -45,6 +45,8 @@ def find_local(i, face_embedding: np.ndarray, threshold: float = 0.3, workers: i
 
     results = []
     for idx in range(start, end):
+        if _local_emebddings[idx].shape != face_embedding.shape:
+            continue
         distance = verification.find_distance(
             face_embedding, _local_emebddings[idx], "cosine"
         )
@@ -82,8 +84,11 @@ class FaceSearchService:
         import pickle
         representations = pickle.load(open(db_path, "rb"))
         for rep in representations:
+            if "embedding" not in rep:
+                print(f"face {rep['identity']} has no embedding")
+                continue
             self.hash_index.append(hash_face(rep))
-            self.embeddings.append(rep["embedding"])
+            self.embeddings.append(np.array(rep["embedding"]))
             
     def __init_pool(self, workers: int = 5, warm_up_time_ms: int = 300):
         for i in range(workers):
