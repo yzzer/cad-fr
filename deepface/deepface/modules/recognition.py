@@ -387,7 +387,11 @@ def __find_bulk_embeddings(
         disable=silent,
     ):
         file_hash = image_utils.find_image_hash(employee)
-
+        import os
+        if "CONF_THRED" in os.environ:
+            conf_thred = float(os.environ["CONF_THRED"])
+        else:
+            conf_thred = 0.8
         try:
             img_objs = detection.extract_faces(
                 img_path=employee,
@@ -397,7 +401,7 @@ def __find_bulk_embeddings(
                 align=align,
                 expand_percentage=20,
             )
-            img_objs = list(filter(lambda x: x["confidence"] > 0.83, img_objs))
+            img_objs = list(filter(lambda x: x["confidence"] > conf_thred, img_objs))
 
         except ValueError as err:
             logger.error(f"Exception while extracting faces from {employee}: {str(err)}")

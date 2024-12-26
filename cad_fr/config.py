@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     presentation_sim_threshold: float = 0.22
     workers: int = 3
     worker_warm_up_time_ms: int = 300
+    presentation_distance_metric: str = "cosine"
     
 def read_yaml_config():
     import os

@@ -27,11 +27,13 @@ def face_extract(frame: np.ndarray, detector_be: str = 'yolov11s', confidence_th
             img_path = frame, 
             detector_backend = detector_be,
             enforce_detection=False,
+            grayscale=False,
             expand_percentage=expand,
         )
     
     results = []
     for face_obj in face_objs:
+        
         if face_obj['confidence'] < confidence_threshold:
             continue
         results.append({

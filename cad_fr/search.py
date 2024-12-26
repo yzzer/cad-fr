@@ -69,8 +69,8 @@ if __name__ == "__main__":
     expand_percentage = settings.presentation_expand_percentage
     print(f"db_path: {db_path} model_name: {model_name} detector_backend: {detector_backend}")
     
-    pkl_file_name = f"{db_path}/ds_model_{model_name.replace('-', '_').lower()}_detector_{detector_backend.lower()}_aligned_normalization_base_expand_{expand_percentage}.pkl"
-    target_pkl_file_name = f"{db_path}/ds_model_{model_name.replace('-', '_').lower()}_detector_{detector_backend.lower()}_aligned_normalization_base_expand_{expand_percentage}.pkl"
+    pkl_file_name = f"{db_path}/ds_model_{model_name.replace('-', '').lower()}_detector_{detector_backend.lower()}_aligned_normalization_base_expand_{expand_percentage}.pkl"
+    target_pkl_file_name = f"{db_path}/ds_model_{model_name.replace('-', '').lower()}_detector_{detector_backend.lower()}_aligned_normalization_base_expand_{expand_percentage}.pkl"
     if os.path.exists(pkl_file_name):
         os.remove(pkl_file_name)
     
@@ -80,5 +80,5 @@ if __name__ == "__main__":
 
 
     import shutil
-    shutil.copy(pkl_file_name, "config/ds_model.pkl")
+    shutil.copy(pkl_file_name, f"config/ds_model_{model_name}_{int(float(os.environ['CONF_THRED']) * 100)}.pkl")
     shutil.move(pkl_file_name, target_pkl_file_name)
