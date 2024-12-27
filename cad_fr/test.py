@@ -39,8 +39,8 @@ def main():
     # warm_up_frame_cnt = 30
     test_imgs_paths = []
     import os
-    for dir in os.listdir("./demo_db/test"):
-        test_imgs_paths.append(os.path.join("./demo_db/test", dir))
+    for dir in os.listdir("./test_db/test"):
+        test_imgs_paths.append(os.path.join("./test_db/test", dir))
     for img_path in test_imgs_paths:
         print(f"frame {img_path}")
         

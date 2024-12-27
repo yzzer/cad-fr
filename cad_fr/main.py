@@ -1,5 +1,6 @@
 import cv2
 import time
+import pickle
 import numpy as np
 from cad_fr.config import settings
 from utils.face_extract import face_extract, cut_faces, resize_faces
@@ -7,6 +8,17 @@ from utils.search import FaceDedupBuffer, FaceSearchService
 
 from multiprocessing import Process, Queue
 from utils.database import get_db_conn, checkin
+from utils.face_extract import hash_face 
+
+
+def remove_rep(ids, reps):
+    new_reps = []
+    for rep in reps:
+        if hash_face(rep) not in ['382d5c79157b139e31db4001a700a45e080571d60d039b25a8401f50a5f3b72e', '9b6b8f486800424ff0fe2a85ae20cdc0c2f23099168cdcdc8801144dd27608b9', 'a86a80dae3e5a6f9c887553292d4ac24c21d8f0c946b1f43590f5302380d46ec']:            
+            new_reps.append(rep)
+    with open(settings.pkl_file, "wb") as f:
+        pickle.dump(new_reps, f)
+    return new_reps
 
 
 def search_service(queue: Queue):
@@ -14,17 +26,9 @@ def search_service(queue: Queue):
     conn = get_db_conn(settings.db_file)
     cursur = conn.cursor()
     
-    # from utils.face_extract import hash_face 
-    # import pickle
-    # with open(settings.pkl_file, "rb") as f:
-    #     reps = pickle.load(f)
-    # new_reps = []
-    # for rep in reps:
-    #     if hash_face(rep) not in ['382d5c79157b139e31db4001a700a45e080571d60d039b25a8401f50a5f3b72e', '9b6b8f486800424ff0fe2a85ae20cdc0c2f23099168cdcdc8801144dd27608b9', 'a86a80dae3e5a6f9c887553292d4ac24c21d8f0c946b1f43590f5302380d46ec']:            
-    #         new_reps.append(rep)
-    # with open(settings.pkl_file, "wb") as f:
-    #     pickle.dump(new_reps, f)
-    # reps = new_reps
+    with open(settings.pkl_file, "rb") as f:
+        reps = pickle.load(f)
+    # reps = remove_rep(['382d5c79157b139e31db4001a700a45e080571d60d039b25a8401f50a5f3b72e', '9b6b8f486800424ff0fe2a85ae20cdc0c2f23099168cdcdc8801144dd27608b9', 'a86a80dae3e5a6f9c887553292d4ac24c21d8f0c946b1f43590f5302380d46ec'], reps)
     
     while True:
         face: np.ndarray = queue.get()
@@ -39,16 +43,8 @@ def search_service(queue: Queue):
         print(f"search time: {time.time() - tik}s")
         
         # if len(find_idxes) > 0:
-        #     new_reps = []
-        #     for rep in reps:
-        #         if hash_face(rep) not in find_idxes:
-        #             new_reps.append(rep)
-        #     with open(settings.pkl_file, "wb") as f:
-        #         pickle.dump(new_reps, f)
-        #     reps = new_reps
+        #     reps = remove_rep(find_idxes.keys(), reps)
         
-        
-
 def main():
     cap = cv2.VideoCapture(0)
     buffer = FaceDedupBuffer(threshold=settings.dedup_similarity_threshold, max_windows_size=100)

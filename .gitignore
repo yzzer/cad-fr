@@ -1,6 +1,4 @@
 cad_db/*
-*.pkl
-*.sqlite3
 *.pyc
 *.jpg
 note.txt
