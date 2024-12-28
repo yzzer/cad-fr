@@ -145,7 +145,7 @@ class FaceDedupBuffer(FaceSearchService):
         import time
         while True:
             if len(self.faces) == 0:
-                time.sleep(1)
+                time.sleep(3)
                 continue
             self.hash_index.pop(0)
             self.embeddings.pop(0)
