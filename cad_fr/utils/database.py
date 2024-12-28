@@ -6,6 +6,7 @@ def get_db_conn(path: str) -> sqlite3.Connection:
     return conn
 
 def checkin(ids: list[str], cursor: sqlite3.Cursor):
+    print(ids)
     for id in ids:
         cursor.execute('''
             UPDATE face SET checkin_time = ?, flag = 1  WHERE id = ?

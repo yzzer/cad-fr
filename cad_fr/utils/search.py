@@ -42,8 +42,8 @@ def find_local(i, face_embedding: np.ndarray, threshold: float = 0.3, workers: i
 
     match_dict = {}
     for i in range(start, end):
-        if _checkin_status[i]:
-            continue
+        # if _checkin_status[i]:
+        #     continue
         distance = verification.find_cosine_distance(face_embedding, _local_emebddings[i])
         if distance <= threshold:
             match_dict[_local_hash_index[i]] = 1 - distance
@@ -133,12 +133,28 @@ class FaceSearchService:
 
 class FaceDedupBuffer(FaceSearchService):
     
-    def __init__(self, threshold: float = 0.8, max_windows_size: int = 100):
+    def __init__(self, threshold: float = 0.8, max_windows_size: int = 20):
         super().__init__(workers=1)
         self.threshold = threshold
         self.max_windows_size = max_windows_size
         # subprocess_init(self.hash_index, self.embeddings)
         self.faces = []
+        self.start_timer()
+        
+    def timer(self):
+        import time
+        while True:
+            if len(self.faces) == 0:
+                time.sleep(1)
+                continue
+            self.hash_index.pop(0)
+            self.embeddings.pop(0)
+            self.faces.pop(0)
+        
+    def start_timer(self):
+        import threading
+        self.timer_thread = threading.Thread(target=self.timer)
+        self.timer_thread.start()
         
         
     def find(self, face_embedding: np.ndarray) -> list[str]:

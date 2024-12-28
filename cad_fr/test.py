@@ -22,9 +22,16 @@ def search_service(queue: Queue):
         tik = time.time()
         find_idxes = service.find(face, model_name=settings.presentation_model_name, threshold=settings.presentation_sim_threshold
                                         , detector_backend="skip", method=settings.presentation_distance_metric)
-        checkin(find_idxes.keys(), cursur)
+        
+        if len(find_idxes) == 0:
+            continue
+        sorted_find_idxes = list(sorted(find_idxes.items(), key=lambda item: item[1], reverse=True))[:10]
+        # shuffle find_idxes
+        np.random.shuffle(sorted_find_idxes)
+        checkin(sorted_find_idxes[:1][0], cursur)
         print(find_idxes)
         print(f"search time: {time.time() - tik}s")
+        
         
         
 
@@ -39,8 +46,8 @@ def main():
     # warm_up_frame_cnt = 30
     test_imgs_paths = []
     import os
-    for dir in os.listdir("./test_db/test"):
-        test_imgs_paths.append(os.path.join("./test_db/test", dir))
+    for dir in os.listdir("./test_db/test2"):
+        test_imgs_paths.append(os.path.join("./test_db/test2", dir))
     for img_path in test_imgs_paths:
         print(f"frame {img_path}")
         

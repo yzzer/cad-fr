@@ -26,8 +26,8 @@ def search_service(queue: Queue):
     conn = get_db_conn(settings.db_file)
     cursur = conn.cursor()
     
-    with open(settings.pkl_file, "rb") as f:
-        reps = pickle.load(f)
+    # with open(settings.pkl_file, "rb") as f:
+    #     reps = pickle.load(f)
     # reps = remove_rep(['382d5c79157b139e31db4001a700a45e080571d60d039b25a8401f50a5f3b72e', '9b6b8f486800424ff0fe2a85ae20cdc0c2f23099168cdcdc8801144dd27608b9', 'a86a80dae3e5a6f9c887553292d4ac24c21d8f0c946b1f43590f5302380d46ec'], reps)
     
     while True:
@@ -38,7 +38,13 @@ def search_service(queue: Queue):
         tik = time.time()
         find_idxes = service.find(face, model_name=settings.presentation_model_name, threshold=settings.presentation_sim_threshold
                                         , detector_backend="skip", method=settings.presentation_distance_metric)
-        checkin(find_idxes.keys(), cursur)
+        
+        if len(find_idxes) == 0:
+            continue
+        sorted_find_idxes = list(sorted(find_idxes.items(), key=lambda item: item[1], reverse=True))[:10]
+        # shuffle find_idxes
+        np.random.shuffle(sorted_find_idxes)
+        checkin(sorted_find_idxes[:1][0], cursur)
         print(find_idxes)
         print(f"search time: {time.time() - tik}s")
         
